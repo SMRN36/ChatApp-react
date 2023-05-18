@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
+  const navigate = useNavigate();
   const toastOptions = {
     position: "bottom-right",
     autoClose: 8000,
@@ -19,6 +20,12 @@ const Register = () => {
         password: "",
         confirmPassword: "",
       });
+
+      useEffect(() => {
+        if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
+          navigate("/");
+        }
+      }, [])
     
     const handleValidation = () => {
       const { password, confirmPassword, username, email } = values;
@@ -54,7 +61,24 @@ const Register = () => {
 
       const handleSubmit = async (event) => {
         event.preventDefault();
-        handleValidation();
+        if (handleValidation()) {
+          const { email, username, password } = values;
+          const { data } = await axios.post(registerRoute, {
+            username,
+            email,
+            password,
+          });
+          if (data.status === false) {
+            toast.error(data.msg, toastOptions);
+          }
+          if (data.status === true) {
+            localStorage.setItem(
+              process.env.REACT_APP_LOCALHOST_KEY,
+              JSON.stringify(data.user)
+            );
+            navigate("/");
+          }
+        }
       };
 
   return (
