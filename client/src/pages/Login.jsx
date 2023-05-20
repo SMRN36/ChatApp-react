@@ -5,6 +5,7 @@ import { useNavigate, Link } from "react-router-dom";
 import Logo from "../assets/logo1.svg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { loginRoute } from "../utils/APIRoutes";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -40,8 +41,27 @@ const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    validateForm()
+    if (validateForm()) {
+      const { username, password } = values;
+      const { data } = await axios.post(loginRoute, {
+        username,
+        password,
+      });
+      if (data.status === false) {
+        toast.error(data.msg, toastOptions);
+      }
+      if (data.status === true) {
+        localStorage.setItem(
+          process.env.REACT_APP_LOCALHOST_KEY,
+          JSON.stringify(data.user)
+        );
+
+        navigate("/");
+      }
+    }
   };
+
+  
   return (
     <>
       <FormContainer>
