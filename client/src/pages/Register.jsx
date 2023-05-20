@@ -4,6 +4,8 @@ import { useNavigate, Link } from "react-router-dom";
 import Logo from "../assets/logo1.svg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { registerRoute } from "../utils/APIRoutes";
+import axios from "axios";
 
 const Register = () => {
   const navigate = useNavigate();
