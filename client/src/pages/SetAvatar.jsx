@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { setAvatarRoute } from "../utils/APIRoutes";
 import axios from "axios";
-import loader from "../assets/loader.gif";
+import loader from "../assets/loader1.gif";
 import { Buffer } from 'buffer';
 
 const SetAvatar = () => {
@@ -22,6 +22,12 @@ const SetAvatar = () => {
     draggable: true,
     theme: "dark",
   };
+
+  useEffect(async () => {
+    if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
+        navigate("/login");
+      }
+  }, []);
 
   const setProfilePicture = async () =>{
     if(selectedAvatar === undefined){
